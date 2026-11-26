@@ -26,10 +26,10 @@ export function useResumeDossierTrigger(onOpen: () => void) {
 function ResumeDocument({ variant }: { variant: "screen" | "print" }) {
   const p = profile;
   const screen = variant === "screen";
-  const h = screen ? "text-zinc-100" : "text-black";
-  const muted = screen ? "text-zinc-400" : "text-neutral-700";
+  const h = screen ? "text-ink-100" : "text-black";
+  const muted = screen ? "text-ink-400" : "text-neutral-700";
   const section = screen
-    ? "font-mono text-[11px] uppercase tracking-[0.2em] text-emerald-400 border-b border-zinc-800"
+    ? "font-mono text-[11px] uppercase tracking-[0.2em] text-primary-400 border-b border-ink-800"
     : "text-[11px] uppercase tracking-[0.2em] font-semibold text-black border-b border-neutral-400";
   const contact = [p.contact.email, p.contact.linkedin, p.contact.github].filter(Boolean);
 
@@ -37,7 +37,7 @@ function ResumeDocument({ variant }: { variant: "screen" | "print" }) {
     <article className={screen ? "space-y-6 text-sm leading-relaxed" : "space-y-5 text-[12px] leading-snug text-black"}>
       <header>
         <h1 className={`text-2xl font-semibold tracking-tight ${h}`}>{p.name}</h1>
-        <p className={`mt-1 ${screen ? "text-zinc-300" : ""}`}>{p.headline}</p>
+        <p className={`mt-1 ${screen ? "text-ink-300" : ""}`}>{p.headline}</p>
         <p className={muted}>
           {p.location}
           {contact.length > 0 && ` · ${contact.join(" · ")}`}
@@ -46,7 +46,7 @@ function ResumeDocument({ variant }: { variant: "screen" | "print" }) {
 
       <section>
         <h2 className={`${section} mb-2 pb-1`}>Professional Summary</h2>
-        <p className={screen ? "text-zinc-300" : ""}>{p.summary}</p>
+        <p className={screen ? "text-ink-300" : ""}>{p.summary}</p>
       </section>
 
       <section>
@@ -67,7 +67,7 @@ function ResumeDocument({ variant }: { variant: "screen" | "print" }) {
                 {[role.employmentType, role.workplace].filter(Boolean).length > 0 &&
                   ` · ${[role.employmentType, role.workplace].filter(Boolean).join(", ")}`}
               </p>
-              <ul className={`mt-1 list-disc pl-5 ${screen ? "text-zinc-300 marker:text-zinc-600" : ""}`}>
+              <ul className={`mt-1 list-disc pl-5 ${screen ? "text-ink-300 marker:text-ink-600" : ""}`}>
                 {role.focus.map((f) => (
                   <li key={f}>{f}</li>
                 ))}
@@ -83,7 +83,7 @@ function ResumeDocument({ variant }: { variant: "screen" | "print" }) {
           {p.skills.map((cat) => (
             <div key={cat.id} className="break-inside-avoid">
               <dt className={`inline font-semibold ${h}`}>{cat.title}: </dt>
-              <dd className={`inline ${screen ? "text-zinc-300" : ""}`}>{cat.skills.join(", ")}</dd>
+              <dd className={`inline ${screen ? "text-ink-300" : ""}`}>{cat.skills.join(", ")}</dd>
             </div>
           ))}
         </dl>
@@ -103,7 +103,7 @@ function ResumeDocument({ variant }: { variant: "screen" | "print" }) {
         </section>
         <section>
           <h2 className={`${section} mb-2 pb-1`}>Certifications</h2>
-          <ul className={`list-disc pl-5 ${screen ? "text-zinc-300 marker:text-zinc-600" : ""}`}>
+          <ul className={`list-disc pl-5 ${screen ? "text-ink-300 marker:text-ink-600" : ""}`}>
             {p.certifications.map((c) => (
               <li key={c.name}>
                 {c.name} <span className={muted}>({c.issuer})</span>
@@ -154,21 +154,21 @@ export function ResumeModal({ open, onClose }: { open: boolean; onClose: () => v
       <Modal
         open={open}
         onClose={onClose}
-        icon={<FileText className="h-4 w-4 text-emerald-400" />}
+        icon={<FileText className="h-4 w-4 text-primary-400" />}
         title={
           <>
-            resume_dossier<span className="text-zinc-500">.txt</span>
+            resume_dossier<span className="text-ink-500">.txt</span>
           </>
         }
         headerActions={
-          <div className="flex rounded-lg border border-zinc-800 p-0.5 font-mono text-xs">
+          <div className="flex rounded-lg border border-ink-800 p-0.5 font-mono text-xs">
             {(["formatted", "plain"] as const).map((v) => (
               <button
                 key={v}
                 onClick={() => setView(v)}
                 aria-pressed={view === v}
                 className={`rounded-md px-2.5 py-1 transition ${
-                  view === v ? "bg-zinc-800 text-zinc-100" : "text-zinc-500 hover:text-zinc-300"
+                  view === v ? "bg-ink-800 text-ink-100" : "text-ink-500 hover:text-ink-300"
                 }`}
               >
                 {v}
@@ -180,14 +180,14 @@ export function ResumeModal({ open, onClose }: { open: boolean; onClose: () => v
           <div className="flex flex-col gap-2 sm:flex-row sm:justify-end">
             <button
               onClick={copy}
-              className="inline-flex items-center justify-center gap-2 rounded-lg border border-zinc-700 px-4 py-2 text-sm text-zinc-200 transition hover:border-emerald-500/50 hover:text-emerald-300"
+              className="inline-flex items-center justify-center gap-2 rounded-lg border border-ink-700 px-4 py-2 text-sm text-ink-200 transition hover:border-primary-500/50 hover:text-primary-300"
             >
-              {copied ? <Check className="h-4 w-4 text-emerald-400" /> : <Copy className="h-4 w-4" />}
+              {copied ? <Check className="h-4 w-4 text-primary-400" /> : <Copy className="h-4 w-4" />}
               {copied ? "Copied to clipboard" : "Copy plain-text resume"}
             </button>
             <button
               onClick={() => window.print()}
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium text-zinc-950 transition hover:bg-emerald-400"
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary-500 px-4 py-2 text-sm font-medium text-ink-950 transition hover:bg-primary-400"
             >
               <Printer className="h-4 w-4" />
               Print / Save as PDF
@@ -199,7 +199,7 @@ export function ResumeModal({ open, onClose }: { open: boolean; onClose: () => v
           {view === "formatted" ? (
             <ResumeDocument variant="screen" />
           ) : (
-            <pre className="whitespace-pre-wrap font-mono text-xs leading-relaxed text-zinc-300">{plainText}</pre>
+            <pre className="whitespace-pre-wrap font-mono text-xs leading-relaxed text-ink-300">{plainText}</pre>
           )}
         </div>
       </Modal>

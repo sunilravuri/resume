@@ -3,6 +3,7 @@
 import { FileText, Menu, Terminal, X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { profile } from "@/data/profile";
+import { ThemeToggle } from "./ThemeToggle";
 import { ResumeModal, useResumeDossierTrigger } from "./ResumeModal";
 
 export const NAV_ITEMS = [
@@ -43,14 +44,14 @@ export function Nav() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-zinc-800/80 bg-zinc-950/75 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-ink-800/80 bg-ink-950/75 backdrop-blur-xl">
         <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
           <a href="#overview" className="group flex items-center gap-2 font-mono text-sm">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-zinc-800 bg-zinc-900/60 text-emerald-400 transition group-hover:border-emerald-500/50">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-ink-800 bg-ink-900/60 text-primary-400 transition group-hover:border-primary-500/50">
               <Terminal className="h-4 w-4" />
             </span>
-            <span className="text-zinc-100">{initials.toLowerCase()}</span>
-            <span className="hidden text-zinc-600 sm:inline">~/portfolio</span>
+            <span className="text-ink-100">{initials.toLowerCase()}</span>
+            <span className="hidden text-ink-600 sm:inline">~/portfolio</span>
           </a>
 
           <ul className="hidden items-center gap-1 lg:flex">
@@ -59,7 +60,7 @@ export function Nav() {
                 <a
                   href={`#${item.id}`}
                   className={`rounded-md px-3 py-1.5 text-sm transition ${
-                    active === item.id ? "bg-zinc-800/70 text-zinc-100" : "text-zinc-400 hover:text-zinc-100"
+                    active === item.id ? "bg-ink-800/70 text-ink-100" : "text-ink-400 hover:text-ink-100"
                   }`}
                 >
                   {item.label}
@@ -68,19 +69,22 @@ export function Nav() {
             ))}
           </ul>
 
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             <button
               onClick={openResume}
-              className="inline-flex items-center gap-2 rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-3 py-1.5 text-sm font-medium text-emerald-300 transition hover:border-emerald-400 hover:bg-emerald-500/20"
+              className="inline-flex items-center gap-2 rounded-lg border border-primary-500/40 bg-primary-500/10 px-3 py-1.5 text-sm font-medium text-primary-300 transition hover:border-primary-400 hover:bg-primary-500/20"
             >
               <FileText className="h-4 w-4" />
-              <span>Resume Dossier</span>
+              <span>
+                Resume<span className="hidden sm:inline"> Dossier</span>
+              </span>
             </button>
+            <ThemeToggle />
             <button
               onClick={() => setMenuOpen((o) => !o)}
               aria-label="Toggle navigation"
               aria-expanded={menuOpen}
-              className="rounded-lg border border-zinc-800 p-2 text-zinc-400 lg:hidden"
+              className="rounded-lg border border-ink-800 p-2 text-ink-400 transition hover:border-ink-600 hover:text-ink-100 lg:hidden"
             >
               {menuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </button>
@@ -88,14 +92,14 @@ export function Nav() {
         </nav>
 
         {menuOpen && (
-          <ul className="grid grid-cols-2 gap-1 border-t border-zinc-800 px-4 py-3 lg:hidden">
+          <ul className="grid grid-cols-2 gap-1 border-t border-ink-800 px-4 py-3 lg:hidden">
             {NAV_ITEMS.map((item) => (
               <li key={item.id}>
                 <a
                   href={`#${item.id}`}
                   onClick={() => setMenuOpen(false)}
                   className={`block rounded-md px-3 py-2 text-sm ${
-                    active === item.id ? "bg-zinc-800/70 text-zinc-100" : "text-zinc-400"
+                    active === item.id ? "bg-ink-800/70 text-ink-100" : "text-ink-400"
                   }`}
                 >
                   {item.label}

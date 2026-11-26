@@ -59,14 +59,15 @@ export function Modal({
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className={`modal-panel flex max-h-[92vh] w-full flex-col overflow-hidden rounded-t-2xl border border-zinc-800 bg-zinc-950 shadow-2xl shadow-emerald-500/5 sm:rounded-2xl ${
+        className={`modal-panel flex max-h-[92vh] w-full flex-col overflow-hidden rounded-t-2xl border border-ink-800 bg-ink-950 shadow-2xl shadow-primary-500/5 sm:rounded-2xl ${
           size === "xl" ? "max-w-6xl" : "max-w-3xl"
         }`}
       >
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-800 bg-zinc-900/60 px-5 py-3">
-          <div className="flex min-w-0 items-center gap-2">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-ink-800 bg-ink-900/60 px-5 py-3">
+          {/* Grows from a 12rem basis so a long title truncates instead of pushing the close button onto its own line. */}
+          <div className="flex min-w-0 flex-[1_1_12rem] items-center gap-2">
             {icon}
-            <h2 id={titleId} className="truncate font-mono text-sm text-zinc-100">
+            <h2 id={titleId} className="truncate font-mono text-sm text-ink-100">
               {title}
             </h2>
           </div>
@@ -76,14 +77,14 @@ export function Modal({
               ref={closeRef}
               onClick={onClose}
               aria-label="Close"
-              className="rounded-lg p-1.5 text-zinc-400 transition hover:bg-zinc-800 hover:text-zinc-100"
+              className="rounded-lg p-1.5 text-ink-400 transition hover:bg-ink-800 hover:text-ink-100"
             >
               <X className="h-4 w-4" />
             </button>
           </div>
         </div>
         <div className="scroll-thin flex-1 overflow-y-auto">{children}</div>
-        {footer && <div className="border-t border-zinc-800 bg-zinc-900/60 px-5 py-3">{footer}</div>}
+        {footer && <div className="border-t border-ink-800 bg-ink-900/60 px-5 py-3">{footer}</div>}
       </div>
     </div>,
     document.body,

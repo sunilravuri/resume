@@ -12,16 +12,18 @@ Interactive personal portfolio for Sunil Krishna Ravuri: a single static Next.js
 
 ## Project Structure
 - `data/`: content only. `profile.ts` (facts), `projects.ts` (carousel cards), `architectures.ts` (diagrams), `technologies.ts` (marquee logos).
-- `lib/`: `resume.ts` (plain-text resume), `useReducedMotion.ts` (useSyncExternalStore hook).
+- `lib/`: `palettes.ts` (color palettes + generated CSS), `resume.ts` (plain-text resume), `useReducedMotion.ts` (useSyncExternalStore hook).
 - `components/`: one component per section. `components/motion/` holds the reusable motion primitives (Reveal, CountUp, TiltCard, ScrollProgress). `Modal.tsx` is the shared dialog shell.
 
 ## Conventions
 - Never hard-code profile facts in components. Read them from `data/`.
 - **No invented projects, metrics, or results.** The three carousel cards are `kind: "blueprint"` and labeled "Reference Blueprint". Real projects are added with `kind: "project"`.
 - Tailwind classes that vary by category must be full literal strings in a lookup map (see `SkillsMatrix.tsx`).
-- Palette: zinc-950 background, zinc-900/60 cards, zinc-800 borders, emerald (primary) and cyan (secondary) accents, monospace for tags and metrics.
+- **Colors are semantic tokens, never raw hues.** Use `ink-*` (neutrals: `bg-ink-950` page, `bg-ink-900/60` cards, `border-ink-800`, `text-ink-100` headings), `primary-*`, `secondary-*`, and `tertiary-*` / `quaternary-*` (skill categories only). Writing `emerald-400` or `zinc-800` in a component breaks palette switching. The scale is called `ink` because `base` would clash with Tailwind's `text-base` font size.
+- Monospace for tags and metrics.
 
 ## Architectural Decisions
+- **Palettes:** `lib/palettes.ts` is the single source. Each palette maps the tokens onto Tailwind color scales; `paletteCss()` generates `:root[data-theme=…]` blocks that are inlined in `<head>` by `app/layout.tsx`, and `paletteInitScript()` applies the saved choice (localStorage `palette`) before first paint. `globals.css` registers the tokens in `@theme` with Terminal defaults and imports Tailwind with `theme(static)` so every hue variable exists at runtime. Light palettes reuse the same classes by inverting the scales (`LIGHT_INK`, `LIGHT_ACCENT`). The site ships two palettes: **Sunrise (light, default)** and **Sunset (dark)**. `ThemeToggle` in the nav switches between them (View Transition cross-fade when supported); its icons swap through the `dark:` custom variant (`[data-theme="sunset"]`), so no React state is needed. A saved id that no longer exists falls back to the default.
 - **Motion is CSS-first.** JS only sets data attributes and CSS variables (`data-revealed`, `--rx/--ry/--gx/--gy`, `--sx/--sy`, `--i`). Every effect is turned off under `prefers-reduced-motion: reduce` in globals.css, and `@media (scripting: none)` keeps content visible without JS.
 - **Stagger scoping:** `.stagger-item` animates when its ancestor `.reveal` is revealed. Section bodies are NOT wrapped in an outer Reveal when they contain stagger items (SkillsMatrix, Credentials, Contact manage their own), or the outer reveal would trigger the cascade early.
 - **Modals render in a portal on `<body>`**, because TiltCard and Reveal use transforms, which would otherwise trap `position: fixed`.
@@ -45,3 +47,13 @@ Interactive personal portfolio for Sunil Krishna Ravuri: a single static Next.js
 ## Git and deploy setup (2026-11-26)
 - Remote: `https://github.com/sunilravuri/resume.git`, branch `main`. The site commit sits on top of the repo's original "Initial commit" (its one-line README was replaced).
 - Deploy: import the repo in Vercel (Framework preset: Next.js, no env vars). Vercel redeploys on every push to `main`.
+
+## Color palettes and mobile pass (2026-11-26)
+- **Added:** five palettes (Terminal default, Ocean, Aurora, Sunset, and Paper light mode) in `lib/palettes.ts`, plus `components/PaletteSwitcher.tsx` in the nav. Renamed all color classes to the semantic tokens (emerald→primary, cyan→secondary, amber→tertiary, violet→quaternary, zinc→ink). `TiltCard` glow prop is now `"primary" | "secondary"`. Raw rgb values in globals.css became `color-mix()` on tokens.
+- **Mobile:** tighter section padding, "Resume" label on phones, swipeable skill filter row, certifications as compact rows, contact cards with side-by-side icon headers, "hover to pause" hidden on touch devices, and modal titles truncate instead of wrapping the close button. Mobile page height went from 7792px to 6785px.
+- **Verified in headless Chrome:** all five palettes at 1440px, Terminal and Paper at 390px, no horizontal overflow, picker opens/closes (outside tap), switching updates the page and `theme-color`, choice persists across reload, diagram modal readable in Paper, zero console errors. `tsc` and `next build` clean, page still static.
+- **Warm palettes added (same day):** the user liked Sunset, so Dusk, Ember, Copper, Golden Hour and Sunrise (light) were added. That makes 11 palettes; the picker list now scrolls (`max-h` on the radiogroup). The default is still Terminal until the user picks one.
+
+## Sunrise default + light/dark toggle (2026-11-26)
+- The user chose **Sunrise** (light) as the look, with **Sunset** as the dark option. The other nine palettes were removed (never committed; recreate them in `PALETTES` if wanted). `PaletteSwitcher.tsx` was replaced by `ThemeToggle.tsx` (☾/☀ button). `globals.css` `@theme` fallbacks are now the Sunset hues, and a `dark:` custom variant targets Sunset.
+- **Verified:** first visit is light; toggling switches to dark and saves it; the choice survives a reload; toggling back works; an old saved palette id falls back to light; no console errors; build is static.

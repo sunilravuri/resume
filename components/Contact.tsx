@@ -25,43 +25,47 @@ export function Contact() {
 
   return (
     <Reveal>
-      <div className="relative overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900/40 p-6 sm:p-10">
-        <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl" aria-hidden />
-        <div className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-cyan-500/10 blur-3xl" aria-hidden />
+      <div className="relative overflow-hidden rounded-3xl border border-ink-800 bg-ink-900/40 p-4 sm:p-10">
+        <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary-500/10 blur-3xl" aria-hidden />
+        <div className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-secondary-500/10 blur-3xl" aria-hidden />
 
         <div className="relative">
-          <p className="max-w-2xl text-lg text-zinc-300">
+          <p className="max-w-2xl px-1 text-base text-ink-300 sm:px-0 sm:text-lg">
             Reach out about Gen-AI engineering, cloud and Kubernetes infrastructure, or enterprise database architecture.
           </p>
-          <p className="mt-2 flex items-center gap-2 font-mono text-sm text-zinc-500">
-            <MapPin className="h-4 w-4 text-zinc-600" /> {profile.location}
+          <p className="mt-2 flex items-center gap-2 px-1 font-mono text-sm text-ink-500 sm:px-0">
+            <MapPin className="h-4 w-4 text-ink-600" /> {profile.location}
           </p>
 
-          <ul className="mt-8 grid gap-4 md:grid-cols-3">
+          <ul className="mt-6 grid gap-3 sm:mt-8 md:grid-cols-3 md:gap-4">
             {email && (
               <li className="stagger-item" style={{ "--i": 0 } as CSSProperties}>
                 <TiltCard className="h-full rounded-2xl">
-                  <div className="flex h-full flex-col rounded-2xl border border-zinc-800 bg-zinc-950/70 p-5 transition-colors hover:border-emerald-500/40">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-300">
-                      <Mail className="h-5 w-5" />
-                    </span>
-                    <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-500">email</p>
-                    <a href={`mailto:${email}`} className="mt-1 break-all text-sm font-medium text-zinc-100 hover:text-emerald-300">
-                      {email}
-                    </a>
-                    <div className="mt-auto flex gap-2 pt-5">
+                  <div className="flex h-full flex-col rounded-2xl border border-ink-800 bg-ink-950/70 p-4 transition-colors hover:border-primary-500/40 md:p-5">
+                    <div className="flex items-center gap-3 md:block">
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-primary-500/30 bg-primary-500/10 text-primary-300">
+                        <Mail className="h-5 w-5" />
+                      </span>
+                      <div className="min-w-0 md:mt-4">
+                        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-500">email</p>
+                        <a href={`mailto:${email}`} className="mt-0.5 block break-all text-sm font-medium text-ink-100 hover:text-primary-300 md:mt-1">
+                          {email}
+                        </a>
+                      </div>
+                    </div>
+                    <div className="mt-auto flex gap-2 pt-4 md:pt-5">
                       <a
                         href={`mailto:${email}`}
-                        className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-emerald-500 px-3 py-2 text-sm font-medium text-zinc-950 transition hover:bg-emerald-400"
+                        className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary-500 px-3 py-2 text-sm font-medium text-ink-950 transition hover:bg-primary-400"
                       >
                         Send email
                       </a>
                       <button
                         onClick={copyEmail}
                         aria-label="Copy email address"
-                        className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-zinc-700 px-3 py-2 text-sm text-zinc-300 transition hover:border-emerald-500/50 hover:text-emerald-300"
+                        className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-ink-700 px-3 py-2 text-sm text-ink-300 transition hover:border-primary-500/50 hover:text-primary-300"
                       >
-                        {copied ? <Check className="h-4 w-4 text-emerald-400" /> : <Copy className="h-4 w-4" />}
+                        {copied ? <Check className="h-4 w-4 text-primary-400" /> : <Copy className="h-4 w-4" />}
                         <span aria-live="polite">{copied ? "Copied" : "Copy"}</span>
                       </button>
                     </div>
@@ -72,19 +76,23 @@ export function Contact() {
 
             {linkedin && (
               <li className="stagger-item" style={{ "--i": 3 } as CSSProperties}>
-                <TiltCard glow="cyan" className="h-full rounded-2xl">
+                <TiltCard glow="secondary" className="h-full rounded-2xl">
                   <a
                     href={linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex h-full flex-col rounded-2xl border border-zinc-800 bg-zinc-950/70 p-5 transition-colors hover:border-cyan-500/40"
+                    className="group flex h-full flex-col rounded-2xl border border-ink-800 bg-ink-950/70 p-4 transition-colors hover:border-secondary-500/40 md:p-5"
                   >
-                    <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-500/30 bg-cyan-500/10 text-cyan-300">
-                      <UserPlus className="h-5 w-5" />
-                    </span>
-                    <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-500">linkedin</p>
-                    <p className="mt-1 break-all text-sm font-medium text-zinc-100 group-hover:text-cyan-300">{linkedinHandle}</p>
-                    <span className="mt-auto flex items-center gap-1.5 pt-5 text-sm font-medium text-cyan-400">
+                    <div className="flex items-center gap-3 md:block">
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-secondary-500/30 bg-secondary-500/10 text-secondary-300">
+                        <UserPlus className="h-5 w-5" />
+                      </span>
+                      <div className="min-w-0 md:mt-4">
+                        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-500">linkedin</p>
+                        <p className="mt-0.5 break-all text-sm font-medium text-ink-100 group-hover:text-secondary-300 md:mt-1">{linkedinHandle}</p>
+                      </div>
+                    </div>
+                    <span className="mt-auto flex items-center gap-1.5 pt-4 text-sm font-medium text-secondary-400 md:pt-5">
                       Connect on LinkedIn
                       <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                     </span>
@@ -97,15 +105,19 @@ export function Contact() {
               <TiltCard className="h-full rounded-2xl">
                 <button
                   onClick={openResumeDossier}
-                  className="group flex h-full w-full flex-col rounded-2xl border border-zinc-800 bg-zinc-950/70 p-5 text-left transition-colors hover:border-emerald-500/40"
+                  className="group flex h-full w-full flex-col rounded-2xl border border-ink-800 bg-ink-950/70 p-4 text-left transition-colors hover:border-primary-500/40 md:p-5"
                 >
-                  <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900 text-zinc-300 group-hover:text-emerald-300">
-                    <FileText className="h-5 w-5" />
+                  <span className="flex items-center gap-3 md:block">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-ink-700 bg-ink-900 text-ink-300 group-hover:text-primary-300">
+                      <FileText className="h-5 w-5" />
+                    </span>
+                    <span className="block min-w-0 md:mt-4">
+                      <span className="block font-mono text-[11px] uppercase tracking-[0.18em] text-ink-500">resume</span>
+                      <span className="mt-0.5 block text-sm font-medium text-ink-100 md:mt-1">Resume Dossier</span>
+                    </span>
                   </span>
-                  <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-500">resume</p>
-                  <p className="mt-1 text-sm font-medium text-zinc-100">Resume Dossier</p>
-                  <p className="mt-1 text-sm text-zinc-500">Copy as plain text, or print / save as PDF.</p>
-                  <span className="mt-auto flex items-center gap-1.5 pt-5 text-sm font-medium text-emerald-400">
+                  <span className="mt-2 block text-sm text-ink-500 md:mt-1">Copy as plain text, or print / save as PDF.</span>
+                  <span className="mt-auto flex items-center gap-1.5 pt-4 text-sm font-medium text-primary-400 md:pt-5">
                     Open dossier
                     <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                   </span>

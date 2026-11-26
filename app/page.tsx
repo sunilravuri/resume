@@ -28,17 +28,17 @@ function Section({
   children: ReactNode;
 }) {
   return (
-    <section id={id} className="scroll-mt-20 border-t border-zinc-900 py-20">
+    <section id={id} className="scroll-mt-16 border-t border-ink-800/50 py-14 sm:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <Reveal>
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-emerald-400">
-            <span className="text-zinc-600">{index} /</span> {eyebrow}
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary-400">
+            <span className="text-ink-600">{index} /</span> {eyebrow}
           </p>
-          <h2 className="mt-2 text-2xl font-semibold tracking-tight text-zinc-50 sm:text-3xl">{title}</h2>
-          {description && <p className="mt-3 max-w-2xl text-zinc-400">{description}</p>}
+          <h2 className="mt-2 text-2xl font-semibold tracking-tight text-ink-50 sm:text-3xl">{title}</h2>
+          {description && <p className="mt-3 max-w-2xl text-ink-400">{description}</p>}
         </Reveal>
         {/* Each section body handles its own reveal so nested stagger effects stay independent. */}
-        <div className="mt-10">{children}</div>
+        <div className="mt-8 sm:mt-10">{children}</div>
       </div>
     </section>
   );
@@ -92,19 +92,19 @@ export default function Home() {
         </Section>
       </main>
 
-      <footer className="border-t border-zinc-900 py-10">
-        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 font-mono text-xs text-zinc-600 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+      <footer className="border-t border-ink-800/50 py-10">
+        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 font-mono text-xs text-ink-600 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <span>
             © {new Date().getFullYear()} {profile.name}
           </span>
           <div className="flex gap-4">
             {email && (
-              <a href={`mailto:${email}`} className="flex items-center gap-1.5 transition hover:text-emerald-300">
+              <a href={`mailto:${email}`} className="flex items-center gap-1.5 transition hover:text-primary-300">
                 <Mail className="h-3.5 w-3.5" /> email
               </a>
             )}
             {linkedin && (
-              <a href={linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 transition hover:text-cyan-300">
+              <a href={linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 transition hover:text-secondary-300">
                 <UserPlus className="h-3.5 w-3.5" /> linkedin
               </a>
             )}

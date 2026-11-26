@@ -11,12 +11,12 @@ export function TiltCard({
   children,
   className = "",
   maxTilt = 6,
-  glow = "emerald",
+  glow = "primary",
 }: {
   children: ReactNode;
   className?: string;
   maxTilt?: number;
-  glow?: "emerald" | "cyan";
+  glow?: "primary" | "secondary";
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();

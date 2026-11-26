@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { profile } from "@/data/profile";
+import { DEFAULT_PALETTE, PALETTES, paletteCss, paletteInitScript } from "@/lib/palettes";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
@@ -17,14 +18,18 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#09090b",
-  colorScheme: "dark",
+  themeColor: PALETTES.find((p) => p.id === DEFAULT_PALETTE)!.themeColor,
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrains.variable}`}>
-      <body className="min-h-screen bg-zinc-950 font-sans text-zinc-300 antialiased selection:bg-emerald-500/30 selection:text-emerald-100">
+    // suppressHydrationWarning: the init script sets data-theme before React hydrates.
+    <html lang="en" className={`${inter.variable} ${jetbrains.variable}`} suppressHydrationWarning>
+      <head>
+        <style id="palettes" dangerouslySetInnerHTML={{ __html: paletteCss() }} />
+        <script dangerouslySetInnerHTML={{ __html: paletteInitScript() }} />
+      </head>
+      <body className="min-h-screen bg-ink-950 font-sans text-ink-300 antialiased selection:bg-primary-500/30 selection:text-primary-100">
         {children}
       </body>
     </html>

@@ -58,7 +58,7 @@ function MiniFlow({ architectureId }: { architectureId: string }) {
               return (
                 <span
                   key={n.id}
-                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-800 bg-zinc-950 text-zinc-400 transition-colors group-hover:border-emerald-500/40 group-hover:text-emerald-300"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-ink-800 bg-ink-950 text-ink-400 transition-colors group-hover:border-primary-500/40 group-hover:text-primary-300"
                 >
                   <Icon className="h-4 w-4" />
                 </span>
@@ -76,37 +76,37 @@ function ProjectCard({ project, index, onOpen }: { project: Project; index: numb
     <TiltCard className="h-full rounded-2xl">
       <button
         onClick={onOpen}
-        className="group flex h-full w-full flex-col rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6 text-left transition-colors hover:border-emerald-500/40 focus-visible:border-emerald-500/60 focus-visible:outline-none"
+        className="group flex h-full w-full flex-col rounded-2xl border border-ink-800 bg-ink-900/60 p-6 text-left transition-colors hover:border-primary-500/40 focus-visible:border-primary-500/60 focus-visible:outline-none"
       >
         <div className="flex items-center justify-between">
-          <span className="rounded-full border border-cyan-500/30 bg-cyan-500/5 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-cyan-300">
+          <span className="rounded-full border border-secondary-500/30 bg-secondary-500/5 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-secondary-300">
             {PROJECT_KIND_LABEL[project.kind]}
           </span>
-          <span className="font-mono text-xs text-zinc-600">{String(index + 1).padStart(2, "0")}</span>
+          <span className="font-mono text-xs text-ink-600">{String(index + 1).padStart(2, "0")}</span>
         </div>
 
         {project.architectureId && (
-          <div className="mt-6 rounded-xl border border-dashed border-zinc-800 bg-zinc-950/40 p-4">
+          <div className="mt-6 rounded-xl border border-dashed border-ink-800 bg-ink-950/40 p-4">
             <MiniFlow architectureId={project.architectureId} />
           </div>
         )}
 
-        <h3 className="mt-6 text-xl font-semibold tracking-tight text-zinc-50">{project.title}</h3>
-        {project.period && <p className="mt-1 font-mono text-xs text-zinc-500">{project.period}</p>}
-        <p className="mt-2 text-sm leading-relaxed text-zinc-400">{project.tagline}</p>
+        <h3 className="mt-6 text-xl font-semibold tracking-tight text-ink-50">{project.title}</h3>
+        {project.period && <p className="mt-1 font-mono text-xs text-ink-500">{project.period}</p>}
+        <p className="mt-2 text-sm leading-relaxed text-ink-400">{project.tagline}</p>
 
         <div className="mt-5 flex flex-wrap gap-1.5">
           {project.tags.map((t) => (
             <span
               key={t}
-              className="rounded-md border border-zinc-800 bg-zinc-950 px-2 py-0.5 font-mono text-[11px] text-zinc-400"
+              className="rounded-md border border-ink-800 bg-ink-950 px-2 py-0.5 font-mono text-[11px] text-ink-400"
             >
               {t}
             </span>
           ))}
         </div>
 
-        <span className="mt-auto flex items-center gap-1.5 pt-6 text-sm font-medium text-emerald-400">
+        <span className="mt-auto flex items-center gap-1.5 pt-6 text-sm font-medium text-primary-400">
           {project.architectureId ? "Open interactive diagram" : "View details"}
           <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
         </span>
@@ -216,13 +216,13 @@ export function ProjectsCarousel() {
   return (
     <div role="region" aria-roledescription="carousel" aria-label="Projects" onKeyDown={onKeyDown}>
       <div className="mb-5 flex items-center justify-between gap-4">
-        <p className="font-mono text-[11px] text-zinc-600">drag · swipe · ← → keys</p>
+        <p className="font-mono text-[11px] text-ink-600">drag · swipe · ← → keys</p>
         <div className="flex gap-2">
           <button
             onClick={() => step(-1)}
             disabled={edges.start}
             aria-label="Previous project"
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900/60 text-zinc-300 transition hover:border-emerald-500/50 hover:text-emerald-300 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-zinc-800 disabled:hover:text-zinc-300"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-ink-800 bg-ink-900/60 text-ink-300 transition hover:border-primary-500/50 hover:text-primary-300 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-ink-800 disabled:hover:text-ink-300"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
@@ -230,7 +230,7 @@ export function ProjectsCarousel() {
             onClick={() => step(1)}
             disabled={edges.end}
             aria-label="Next project"
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900/60 text-zinc-300 transition hover:border-emerald-500/50 hover:text-emerald-300 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-zinc-800 disabled:hover:text-zinc-300"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-ink-800 bg-ink-900/60 text-ink-300 transition hover:border-primary-500/50 hover:text-primary-300 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-ink-800 disabled:hover:text-ink-300"
           >
             <ChevronRight className="h-4 w-4" />
           </button>
@@ -267,7 +267,7 @@ export function ProjectsCarousel() {
             onClick={() => scrollToIndex(i)}
             aria-label={`Go to ${p.title}`}
             aria-current={i === active}
-            className={`h-1.5 rounded-full transition-all ${i === active ? "w-8 bg-emerald-400" : "w-3 bg-zinc-700 hover:bg-zinc-500"}`}
+            className={`h-1.5 rounded-full transition-all ${i === active ? "w-8 bg-primary-400" : "w-3 bg-ink-700 hover:bg-ink-500"}`}
           />
         ))}
       </div>
@@ -276,11 +276,11 @@ export function ProjectsCarousel() {
         open={openProject !== null}
         onClose={close}
         size="xl"
-        icon={<Network className="h-4 w-4 text-emerald-400" />}
+        icon={<Network className="h-4 w-4 text-primary-400" />}
         title={
           openProject && (
             <>
-              {openProject.title} <span className="text-zinc-500">· {PROJECT_KIND_LABEL[openProject.kind].toLowerCase()}</span>
+              {openProject.title} <span className="text-ink-500">· {PROJECT_KIND_LABEL[openProject.kind].toLowerCase()}</span>
             </>
           )
         }
@@ -288,7 +288,7 @@ export function ProjectsCarousel() {
         {openProject && (
           <div className="p-5 sm:p-6">
             {openProject.description && (
-              <p className="mb-6 max-w-3xl text-sm leading-relaxed text-zinc-400">{openProject.description}</p>
+              <p className="mb-6 max-w-3xl text-sm leading-relaxed text-ink-400">{openProject.description}</p>
             )}
             {openArch && <ArchitectureDiagram key={openArch.id} architecture={openArch} />}
             {openProject.links && openProject.links.length > 0 && (
@@ -299,7 +299,7 @@ export function ProjectsCarousel() {
                     href={l.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-700 px-3 py-1.5 text-sm text-zinc-200 transition hover:border-emerald-500/50 hover:text-emerald-300"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-ink-700 px-3 py-1.5 text-sm text-ink-200 transition hover:border-primary-500/50 hover:text-primary-300"
                   >
                     {l.label} <ExternalLink className="h-3.5 w-3.5" />
                   </a>

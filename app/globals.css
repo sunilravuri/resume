@@ -1,13 +1,31 @@
-@import "tailwindcss";
+@import "tailwindcss" theme(static);
 
+/* `dark:` targets the dark palette (Sunset); the default palette is light. */
+@custom-variant dark (&:where([data-theme="sunset"], [data-theme="sunset"] *));
+
+/*
+ * Semantic color tokens. Components use these (bg-ink-950, text-primary-300, ...),
+ * never raw hues. The values below are Sunset (dark) fallbacks that Tailwind needs to
+ * generate the utilities; lib/palettes.ts generates the real per-palette values,
+ * which are inlined in <head> and override these. `theme(static)` keeps every
+ * Tailwind color variable in the CSS so palettes can reference any hue.
+ */
 @theme {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-ink-50: var(--color-stone-50); --color-ink-100: var(--color-stone-100); --color-ink-200: var(--color-stone-200); --color-ink-300: var(--color-stone-300); --color-ink-400: var(--color-stone-400); --color-ink-500: var(--color-stone-500);
+  --color-ink-600: var(--color-stone-600); --color-ink-700: var(--color-stone-700); --color-ink-800: var(--color-stone-800); --color-ink-900: var(--color-stone-900); --color-ink-950: var(--color-stone-950);
+  --color-primary-50: var(--color-amber-50); --color-primary-100: var(--color-amber-100); --color-primary-200: var(--color-amber-200); --color-primary-300: var(--color-amber-300); --color-primary-400: var(--color-amber-400); --color-primary-500: var(--color-amber-500);
+  --color-primary-600: var(--color-amber-600); --color-primary-700: var(--color-amber-700); --color-primary-800: var(--color-amber-800); --color-primary-900: var(--color-amber-900); --color-primary-950: var(--color-amber-950);
+  --color-secondary-50: var(--color-rose-50); --color-secondary-100: var(--color-rose-100); --color-secondary-200: var(--color-rose-200); --color-secondary-300: var(--color-rose-300); --color-secondary-400: var(--color-rose-400); --color-secondary-500: var(--color-rose-500);
+  --color-secondary-600: var(--color-rose-600); --color-secondary-700: var(--color-rose-700); --color-secondary-800: var(--color-rose-800); --color-secondary-900: var(--color-rose-900); --color-secondary-950: var(--color-rose-950);
+  --color-tertiary-50: var(--color-teal-50); --color-tertiary-100: var(--color-teal-100); --color-tertiary-200: var(--color-teal-200); --color-tertiary-300: var(--color-teal-300); --color-tertiary-400: var(--color-teal-400); --color-tertiary-500: var(--color-teal-500);
+  --color-tertiary-600: var(--color-teal-600); --color-tertiary-700: var(--color-teal-700); --color-tertiary-800: var(--color-teal-800); --color-tertiary-900: var(--color-teal-900); --color-tertiary-950: var(--color-teal-950);
+  --color-quaternary-50: var(--color-violet-50); --color-quaternary-100: var(--color-violet-100); --color-quaternary-200: var(--color-violet-200); --color-quaternary-300: var(--color-violet-300); --color-quaternary-400: var(--color-violet-400); --color-quaternary-500: var(--color-violet-500);
+  --color-quaternary-600: var(--color-violet-600); --color-quaternary-700: var(--color-violet-700); --color-quaternary-800: var(--color-violet-800); --color-quaternary-900: var(--color-violet-900); --color-quaternary-950: var(--color-violet-950);
 }
 
-:root {
-  color-scheme: dark;
-}
 
 html {
   scroll-behavior: smooth;
@@ -15,14 +33,14 @@ html {
 }
 
 body {
-  background-color: #09090b;
+  background-color: var(--color-ink-950);
 }
 
 /* Subtle technical grid behind the page */
 .bg-grid {
   background-image:
-    linear-gradient(to right, rgb(39 39 42 / 0.35) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(39 39 42 / 0.35) 1px, transparent 1px);
+    linear-gradient(to right, color-mix(in oklab, var(--color-ink-800) 35%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--color-ink-800) 35%, transparent) 1px, transparent 1px);
   background-size: 48px 48px;
   mask-image: radial-gradient(ellipse at top, black 30%, transparent 75%);
 }
@@ -37,12 +55,12 @@ body {
   to { background-position: 0 24px; }
 }
 .flow-x {
-  background-image: linear-gradient(to right, rgb(52 211 153 / 0.9) 50%, transparent 50%);
+  background-image: linear-gradient(to right, color-mix(in oklab, var(--color-primary-400) 90%, transparent) 50%, transparent 50%);
   background-size: 12px 2px;
   animation: flow-x 1s linear infinite;
 }
 .flow-y {
-  background-image: linear-gradient(to bottom, rgb(52 211 153 / 0.9) 50%, transparent 50%);
+  background-image: linear-gradient(to bottom, color-mix(in oklab, var(--color-primary-400) 90%, transparent) 50%, transparent 50%);
   background-size: 2px 12px;
   animation: flow-y 1s linear infinite;
 }
@@ -96,12 +114,12 @@ body {
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.3s ease;
-  background: radial-gradient(420px circle at var(--gx, 50%) var(--gy, 50%), rgb(52 211 153 / 0.13), transparent 45%);
-  box-shadow: 0 0 0 1px rgb(52 211 153 / 0.18), 0 10px 40px -10px rgb(16 185 129 / 0.25);
+  background: radial-gradient(420px circle at var(--gx, 50%) var(--gy, 50%), color-mix(in oklab, var(--color-primary-400) 13%, transparent), transparent 45%);
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-primary-400) 18%, transparent), 0 10px 40px -10px color-mix(in oklab, var(--color-primary-500) 25%, transparent);
 }
-.tilt[data-glow="cyan"]::after {
-  background: radial-gradient(420px circle at var(--gx, 50%) var(--gy, 50%), rgb(34 211 238 / 0.12), transparent 45%);
-  box-shadow: 0 0 0 1px rgb(34 211 238 / 0.18), 0 10px 40px -10px rgb(6 182 212 / 0.25);
+.tilt[data-glow="secondary"]::after {
+  background: radial-gradient(420px circle at var(--gx, 50%) var(--gy, 50%), color-mix(in oklab, var(--color-secondary-400) 12%, transparent), transparent 45%);
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-secondary-400) 18%, transparent), 0 10px 40px -10px color-mix(in oklab, var(--color-secondary-500) 25%, transparent);
 }
 .tilt:hover::after {
   opacity: 1;
@@ -118,12 +136,12 @@ body {
   opacity: 1;
 }
 .spotlight-glow {
-  background: radial-gradient(520px circle at var(--sx, 50%) var(--sy, 30%), rgb(16 185 129 / 0.12), transparent 65%);
+  background: radial-gradient(520px circle at var(--sx, 50%) var(--sy, 30%), color-mix(in oklab, var(--color-primary-500) 12%, transparent), transparent 65%);
 }
 .spotlight-grid {
   background-image:
-    linear-gradient(to right, rgb(52 211 153 / 0.22) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(52 211 153 / 0.22) 1px, transparent 1px);
+    linear-gradient(to right, color-mix(in oklab, var(--color-primary-400) 22%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--color-primary-400) 22%, transparent) 1px, transparent 1px);
   background-size: 48px 48px;
   mask-image: radial-gradient(220px circle at var(--sx, 50%) var(--sy, 30%), black, transparent);
 }
@@ -192,7 +210,7 @@ body {
 /* Thin scrollbars inside panels */
 .scroll-thin {
   scrollbar-width: thin;
-  scrollbar-color: rgb(63 63 70) transparent;
+  scrollbar-color: var(--color-ink-700) transparent;
 }
 
 /* Print: only the resume dossier (portal mounted on <body>), black on white */

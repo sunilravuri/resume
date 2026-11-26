@@ -26,6 +26,7 @@ Push this folder to a Git repo, import it in Vercel, and deploy. No settings or 
 | `data/projects.ts` | Projects carousel cards. Add real projects here (see below). |
 | `data/architectures.ts` | Interactive diagrams (stages, nodes, design notes) |
 | `data/technologies.ts` | Logo rows in the tech marquee |
+| `lib/palettes.ts` | The light and dark color palettes, and which is the default (`DEFAULT_PALETTE`) |
 
 The page and the plain-text / printable resume are all generated from these files.
 
@@ -56,6 +57,7 @@ Append to `projects` in `data/projects.ts`:
 - Projects carousel: drag with the mouse, swipe on touch, use the arrow buttons or ← → keys, and click a card to open its diagram
 - Timeline dots and the timeline line light up as you scroll past each role
 - **Reduced motion:** when the OS asks for it, every animation is off. Content appears immediately, the logo rows become a static grid, and tilt and spotlight are disabled.
+- Light mode (Sunrise) by default, with a ☾/☀ button in the nav to switch to dark mode (Sunset). The choice is remembered.
 - Cmd/Ctrl+P anywhere prints only the resume
 
 ## Structure
@@ -65,10 +67,10 @@ app/            layout.tsx, page.tsx, globals.css (theme, motion, print styles)
 components/
   Nav.tsx, Hero.tsx, TechMarquee.tsx, ProjectsCarousel.tsx, ArchitectureDiagram.tsx,
   SkillsMatrix.tsx, ExperienceTimeline.tsx, Credentials.tsx, Contact.tsx,
-  ResumeModal.tsx, Modal.tsx
+  ResumeModal.tsx, Modal.tsx, ThemeToggle.tsx
   motion/       Reveal, CountUp, TiltCard, ScrollProgress
 data/           profile, projects, architectures, technologies
-lib/            resume.ts (plain-text resume), useReducedMotion.ts
+lib/            palettes.ts, resume.ts (plain-text resume), useReducedMotion.ts
 ```
 
 Logos: brand marks come from [simple-icons](https://simpleicons.org) (CC0). Brands not included there (Oracle, Microsoft, AWS, and some AI tools) use neutral Lucide icons.
