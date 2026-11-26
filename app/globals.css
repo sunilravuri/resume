@@ -1,0 +1,205 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background-color: #09090b;
+}
+
+/* Subtle technical grid behind the page */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgb(39 39 42 / 0.35) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(39 39 42 / 0.35) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at top, black 30%, transparent 75%);
+}
+
+/* Animated data-flow connector between architecture nodes */
+@keyframes flow-x {
+  from { background-position: 0 0; }
+  to { background-position: 24px 0; }
+}
+@keyframes flow-y {
+  from { background-position: 0 0; }
+  to { background-position: 0 24px; }
+}
+.flow-x {
+  background-image: linear-gradient(to right, rgb(52 211 153 / 0.9) 50%, transparent 50%);
+  background-size: 12px 2px;
+  animation: flow-x 1s linear infinite;
+}
+.flow-y {
+  background-image: linear-gradient(to bottom, rgb(52 211 153 / 0.9) 50%, transparent 50%);
+  background-size: 2px 12px;
+  animation: flow-y 1s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .flow-x, .flow-y { animation: none; }
+}
+
+/* ---------- Scroll reveal ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s ease var(--reveal-delay, 0ms),
+    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) var(--reveal-delay, 0ms);
+}
+.reveal[data-revealed="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Children that appear one after another once their nearest .reveal is visible */
+.stagger-item {
+  opacity: 0;
+  transform: translateY(6px) scale(0.96);
+  transition:
+    opacity 0.4s ease calc(var(--i, 0) * 35ms + 150ms),
+    transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1) calc(var(--i, 0) * 35ms + 150ms),
+    border-color 0.15s ease,
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+.reveal[data-revealed="true"] .stagger-item {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- Tilt + glow cards ---------- */
+.tilt {
+  position: relative;
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.25s ease-out;
+  will-change: transform;
+}
+.tilt::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(420px circle at var(--gx, 50%) var(--gy, 50%), rgb(52 211 153 / 0.13), transparent 45%);
+  box-shadow: 0 0 0 1px rgb(52 211 153 / 0.18), 0 10px 40px -10px rgb(16 185 129 / 0.25);
+}
+.tilt[data-glow="cyan"]::after {
+  background: radial-gradient(420px circle at var(--gx, 50%) var(--gy, 50%), rgb(34 211 238 / 0.12), transparent 45%);
+  box-shadow: 0 0 0 1px rgb(34 211 238 / 0.18), 0 10px 40px -10px rgb(6 182 212 / 0.25);
+}
+.tilt:hover::after {
+  opacity: 1;
+}
+
+/* ---------- Hero spotlight ---------- */
+.spotlight-glow,
+.spotlight-grid {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.spotlight:hover .spotlight-glow,
+.spotlight:hover .spotlight-grid {
+  opacity: 1;
+}
+.spotlight-glow {
+  background: radial-gradient(520px circle at var(--sx, 50%) var(--sy, 30%), rgb(16 185 129 / 0.12), transparent 65%);
+}
+.spotlight-grid {
+  background-image:
+    linear-gradient(to right, rgb(52 211 153 / 0.22) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(52 211 153 / 0.22) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(220px circle at var(--sx, 50%) var(--sy, 30%), black, transparent);
+}
+
+/* ---------- Logo marquee ---------- */
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+.marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee var(--duration, 50s) linear infinite;
+}
+.marquee-track[data-direction="reverse"] {
+  animation-direction: reverse;
+}
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+
+/* ---------- Modal + detail fades ---------- */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes backdrop-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.fade-in { animation: fade-in 0.35s ease both; }
+.modal-backdrop { animation: backdrop-in 0.2s ease both; }
+.modal-panel { animation: fade-in 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* ---------- Reduced motion and no-JS: show everything, animate nothing ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .stagger-item {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .tilt { transform: none !important; transition: none; }
+  .spotlight-glow, .spotlight-grid { display: none; }
+  .marquee { mask-image: none; }
+  .marquee-track {
+    animation: none;
+    width: auto;
+    justify-content: center;
+  }
+  .marquee-track > ul:first-child { flex-wrap: wrap; justify-content: center; row-gap: 0.75rem; }
+  .marquee-dup { display: none !important; }
+  .fade-in, .modal-backdrop, .modal-panel { animation: none; }
+}
+@media (scripting: none) {
+  .reveal, .stagger-item { opacity: 1; transform: none; }
+}
+
+/* Thin scrollbars inside panels */
+.scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(63 63 70) transparent;
+}
+
+/* Print: only the resume dossier (portal mounted on <body>), black on white */
+#resume-print { display: none; }
+@media print {
+  @page { margin: 0.6in; }
+  html, body { background: #fff !important; }
+  body > *:not(#resume-print) { display: none !important; }
+  #resume-print { display: block !important; color: #000; }
+}
