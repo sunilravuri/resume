@@ -1,7 +1,7 @@
 # Project Architecture
 
 ## Overview
-Interactive personal portfolio for Sunil Krishna Ravuri: a single static Next.js page with a projects carousel (opening interactive architecture diagrams), technology marquees, skills matrix, scroll-driven career timeline, credentials, contact, and a copyable/printable resume.
+Interactive personal portfolio for Naga V Sunil K Ravuri: a single static Next.js page with a projects carousel (opening interactive architecture diagrams), technology marquees, skills matrix, scroll-driven career timeline, credentials, contact, and a copyable/printable resume.
 
 ## Tech Stack
 - Runtime: Node.js 22, Next.js 16 (App Router, Turbopack). The page is fully static (`○ /`).
@@ -17,7 +17,7 @@ Interactive personal portfolio for Sunil Krishna Ravuri: a single static Next.js
 
 ## Conventions
 - Never hard-code profile facts in components. Read them from `data/`.
-- **No invented projects, metrics, or results.** The three carousel cards are `kind: "blueprint"` and labeled "Reference Blueprint". Real projects are added with `kind: "project"`.
+- **No invented projects, metrics, or results.** Real projects use `kind: "project"` and come first in the carousel; their facts come from each project's code and public pages. The three reference cards are `kind: "blueprint"` and labeled "Reference Blueprint". `ArchitectureDiagram` takes `isProject` so the footnote matches the card kind.
 - Tailwind classes that vary by category must be full literal strings in a lookup map (see `SkillsMatrix.tsx`).
 - **Colors are semantic tokens, never raw hues.** Use `ink-*` (neutrals: `bg-ink-950` page, `bg-ink-900/60` cards, `border-ink-800`, `text-ink-100` headings), `primary-*`, `secondary-*`, and `tertiary-*` / `quaternary-*` (skill categories only). Writing `emerald-400` or `zinc-800` in a component breaks palette switching. The scale is called `ink` because `base` would clash with Tailwind's `text-base` font size.
 - Monospace for tags and metrics.
@@ -57,3 +57,11 @@ Interactive personal portfolio for Sunil Krishna Ravuri: a single static Next.js
 ## Sunrise default + light/dark toggle (2026-11-26)
 - The user chose **Sunrise** (light) as the look, with **Sunset** as the dark option. The other nine palettes were removed (never committed; recreate them in `PALETTES` if wanted). `PaletteSwitcher.tsx` was replaced by `ThemeToggle.tsx` (☾/☀ button). `globals.css` `@theme` fallbacks are now the Sunset hues, and a `dark:` custom variant targets Sunset.
 - **Verified:** first visit is light; toggling switches to dark and saves it; the choice survives a reload; toggling back works; an old saved palette id falls back to light; no console errors; build is static.
+
+## Resume refresh: AI projects (2026-11-26)
+- **Profile:** name is now "Naga V Sunil K Ravuri" (user's choice). AA title is Sr. Infrastructure Engineer, with the Grievance Code RAG agent, RADAR and ExaPatch as focus items. Doyensys and Capital One merged into one entry ("Doyensys Inc (client: Capital One)", Jun 2016 – Mar 2017). TCS dates are Aug 2010 – May 2016. Certifications are the user's list of 5 (Azure Solutions Architect replaces Azure Admin; OCI Architect left out pending the user's confirmation). Skills gained MCP, A2A, Claude, Gemini, DeepEval, Document Intelligence and app-dev items; the fourth category is now "Development, IaC & Observability". GitHub added to contact.
+- **Projects:** three real projects (Worq360/SDVS, VitalSync Family Health, Agentic Trading Assistant) with `period`, `role`, `highlights` and their own diagrams in `architectures.ts` (Worq360 has 5 stages). The project modal shows period, role and highlights. Only Worq360 has public links (sunilravuri.github.io and its build log); the other repos are private. Worq360 figures match its public page (10 agents, 140+ tools, 37 modules, 3,000+ tests).
+- **Resume:** the formatted, print and plain-text resumes gained an "Independent AI Projects" section built from `kind: "project"` entries.
+- **Diagram icons:** added `shield`, `phone` and `chat`. Marquee gained MCP, Anthropic, Gemini, Ollama, Copilot, FastAPI, TypeScript, NestJS, Angular, Docker and Firebase.
+- **Verified in headless Chrome:** `tsc` and `next build` clean, page static; project cards and all three diagram modals at 1440px; Worq360 modal at 390px; no horizontal overflow; print resume includes the projects; no page errors. The only console error is a pre-existing `/favicon.ico` 404.
+

@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "sw
 const jetbrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains", display: "swap" });
 
 export const metadata: Metadata = {
-  title: `${profile.name} | Gen-AI Product Engineer & Cloud/DB Architect`,
+  title: `${profile.name} | GenAI & Agentic AI Engineer · Cloud/DB Infrastructure`,
   description: profile.summary,
   openGraph: {
     title: `${profile.name} | AI-Native Portfolio`,

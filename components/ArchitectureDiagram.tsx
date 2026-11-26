@@ -10,9 +10,12 @@ import {
   Database,
   Gauge,
   GitMerge,
+  MessagesSquare,
   Mic,
   MousePointerClick,
   Search,
+  ShieldCheck,
+  Smartphone,
   Stethoscope,
   Undo2,
   Workflow,
@@ -35,6 +38,9 @@ export const ARCH_ICONS: Record<ArchIconKey, LucideIcon> = {
   database: Database,
   replicate: GitMerge,
   stethoscope: Stethoscope,
+  shield: ShieldCheck,
+  phone: Smartphone,
+  chat: MessagesSquare,
 };
 
 function Connector() {
@@ -80,7 +86,14 @@ function NodeCard({ node, selected, onSelect }: { node: ArchNode; selected: bool
   );
 }
 
-export function ArchitectureDiagram({ architecture: arch }: { architecture: Architecture }) {
+export function ArchitectureDiagram({
+  architecture: arch,
+  isProject = false,
+}: {
+  architecture: Architecture;
+  /** True for a real project's diagram; false (default) for a reference blueprint. */
+  isProject?: boolean;
+}) {
   const allNodes = arch.stages.flatMap((s) => s.nodes);
   const [nodeId, setNodeId] = useState(allNodes[0].id);
   const node = allNodes.find((n) => n.id === nodeId) ?? allNodes[0];
@@ -169,8 +182,9 @@ export function ArchitectureDiagram({ architecture: arch }: { architecture: Arch
       </div>
 
       <p className="mt-4 font-mono text-[11px] text-ink-600">
-        Reference blueprint built from my verified skill stack. It shows patterns and approaches, not a confidential employer
-        system.
+        {isProject
+          ? "Drawn from the project's own code and documentation. Tap a component for details."
+          : "Reference blueprint built from my verified skill stack. It shows patterns and approaches, not a confidential employer system."}
       </p>
     </div>
   );
