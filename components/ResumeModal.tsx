@@ -4,6 +4,7 @@ import { Check, Copy, FileText, Printer } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { profile } from "@/data/profile";
+import { projects } from "@/data/projects";
 import { buildPlainTextResume } from "@/lib/resume";
 import { Modal } from "./Modal";
 
@@ -32,6 +33,7 @@ function ResumeDocument({ variant }: { variant: "screen" | "print" }) {
     ? "font-mono text-[11px] uppercase tracking-[0.2em] text-primary-400 border-b border-ink-800"
     : "text-[11px] uppercase tracking-[0.2em] font-semibold text-black border-b border-neutral-400";
   const contact = [p.contact.email, p.contact.linkedin, p.contact.github].filter(Boolean);
+  const realProjects = projects.filter((proj) => proj.kind === "project");
 
   return (
     <article className={screen ? "space-y-6 text-sm leading-relaxed" : "space-y-5 text-[12px] leading-snug text-black"}>
@@ -76,6 +78,33 @@ function ResumeDocument({ variant }: { variant: "screen" | "print" }) {
           ))}
         </div>
       </section>
+
+      {realProjects.length > 0 && (
+        <section>
+          <h2 className={`${section} mb-2 pb-1`}>Independent AI Projects</h2>
+          <div className="space-y-3">
+            {realProjects.map((proj) => (
+              <div key={proj.id} className="break-inside-avoid">
+                <div className="flex flex-wrap items-baseline justify-between gap-x-4">
+                  <p className={`font-semibold ${h}`}>{proj.title}</p>
+                  {proj.period && <p className={`font-mono text-xs ${muted}`}>{proj.period}</p>}
+                </div>
+                <p className={`text-xs ${muted}`}>
+                  {[proj.role, proj.links?.[0]?.href].filter(Boolean).join(" · ")}
+                </p>
+                <p className={screen ? "text-ink-300" : ""}>{proj.tagline}</p>
+                {proj.highlights && (
+                  <ul className={`mt-1 list-disc pl-5 ${screen ? "text-ink-300 marker:text-ink-600" : ""}`}>
+                    {proj.highlights.map((hl) => (
+                      <li key={hl}>{hl}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section>
         <h2 className={`${section} mb-2 pb-1`}>Skills</h2>

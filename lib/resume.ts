@@ -1,8 +1,9 @@
 import { profile } from "@/data/profile";
+import { projects } from "@/data/projects";
 
 const rule = (char = "=") => char.repeat(72);
 
-/** Formatted plain-text resume, built entirely from data/profile.ts. */
+/** Formatted plain-text resume, built from data/profile.ts and the real projects in data/projects.ts. */
 export function buildPlainTextResume(): string {
   const p = profile;
   const lines: string[] = [];
@@ -37,6 +38,20 @@ export function buildPlainTextResume(): string {
     for (const loc of role.locations) lines.push(`  • ${loc.period}: ${loc.location}`);
     for (const f of role.focus) lines.push(`  - ${f}`);
     lines.push("");
+  }
+
+  const realProjects = projects.filter((proj) => proj.kind === "project");
+  if (realProjects.length) {
+    lines.push("INDEPENDENT AI PROJECTS");
+    lines.push(rule("-"));
+    for (const proj of realProjects) {
+      lines.push(`${proj.title}${proj.period ? ` | ${proj.period}` : ""}`);
+      const meta = [proj.role, proj.links?.[0]?.href].filter(Boolean);
+      if (meta.length) lines.push(meta.join(" | "));
+      lines.push(proj.tagline);
+      for (const hl of proj.highlights ?? []) lines.push(`  - ${hl}`);
+      lines.push("");
+    }
   }
 
   lines.push("EDUCATION");

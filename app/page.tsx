@@ -59,8 +59,8 @@ export default function Home() {
           id="projects"
           index="01"
           eyebrow="Projects"
-          title="System architecture blueprints"
-          description="Reference architectures that span my work: Gen-AI agents, multi-cloud Kubernetes platforms, and the mission-critical data tier underneath both. Open a card to explore its interactive diagram."
+          title="AI projects & architecture blueprints"
+          description="Production AI systems I built end to end, followed by reference architectures that span my work: Gen-AI agents, multi-cloud Kubernetes platforms, and the mission-critical data tier underneath both. Open a card to explore its interactive diagram."
         >
           <Reveal>
             <ProjectsCarousel />

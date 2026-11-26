@@ -1,7 +1,12 @@
 /**
- * Reference architecture blueprints. Each one is put together from the verified
- * skill stack in data/profile.ts. They show how these technologies fit together,
- * not a specific employer's confidential system, and they contain no invented metrics.
+ * Architecture diagrams.
+ *
+ * The first three are reference blueprints put together from the verified skill
+ * stack in data/profile.ts. They show how these technologies fit together, not a
+ * specific employer's confidential system.
+ *
+ * The rest describe real projects (see data/projects.ts). Their facts come from
+ * each project's own code and public pages. No invented metrics in either kind.
  */
 
 export type ArchIconKey =
@@ -17,7 +22,10 @@ export type ArchIconKey =
   | "app"
   | "database"
   | "replicate"
-  | "stethoscope";
+  | "stethoscope"
+  | "shield"
+  | "phone"
+  | "chat";
 
 export interface ArchNode {
   id: string;
@@ -316,5 +324,331 @@ export const architectures: Architecture[] = [
       },
     ],
     feedback: { label: "baseline → tune → stabilize", toStage: 1 },
+  },
+  {
+    id: "worq360",
+    tab: "Worq360",
+    title: "Worq360: Agentic Workforce Platform",
+    description:
+      "A production staffing platform and a Python multi-agent system running side by side on Azure Kubernetes Service. Both go through the same API and the same permission checks, and every agent write waits for a human to approve it.",
+    stages: [
+      {
+        label: "Clients",
+        nodes: [
+          {
+            id: "w360-web",
+            title: "Angular Web Apps",
+            subtitle: "Main app + Agentic App",
+            icon: "app",
+            tech: ["Angular", "Angular Material", "Signals", "Socket.io", "SSE"],
+            summary:
+              "Two Angular apps: the main Worq360 app with the built-in AskMe assistant, and the Agentic App that streams each agent step and shows approval cards.",
+            details: [
+              "Menus are built from the user's live permissions, so each role sees only what it can use.",
+              "Route guards and interceptors refresh short-lived JWTs.",
+              "The Agent Activity panel streams every step over SSE, with Approve and Reject buttons on writes.",
+            ],
+          },
+        ],
+      },
+      {
+        label: "Platform API",
+        nodes: [
+          {
+            id: "w360-api",
+            title: "NestJS Modular Monolith",
+            subtitle: "37 backend modules",
+            icon: "code",
+            tech: ["NestJS", "TypeScript", "TypeORM", "JWT", "RBAC"],
+            summary:
+              "One API covers onboarding, assignments, timesheets, invoicing, expenses, I-9/E-Verify compliance and recruiting. Every state-changing action is written to the audit log.",
+            details: [
+              "Roles and permissions are admin-editable data, so a new role needs no deploy.",
+              "An LLM business rules engine (Claude Haiku) checks timesheets and expenses against rules written in plain English and can block a submission.",
+              "Claude Vision checks timesheet hours against the client's screenshot before a timesheet can be submitted.",
+            ],
+          },
+        ],
+      },
+      {
+        label: "Agent Layer",
+        nodes: [
+          {
+            id: "w360-agents",
+            title: "LangGraph Orchestrator + 10 Agents",
+            subtitle: "Routing, ReAct loops, A2A",
+            icon: "workflow",
+            tech: ["LangGraph", "LangChain", "Google A2A", "FastAPI", "Human-in-the-loop"],
+            summary:
+              "A small model routes each request to one of ten domain agents, filtered by the user's role. The graph can hop to another domain up to three times when a request spans several.",
+            details: [
+              "Before any write, the graph pauses with interrupt() and saves its state in a Postgres checkpoint until someone approves or rejects it.",
+              "Agents are exposed through the Google A2A JSON-RPC protocol, with an AgentCard for discovery and SSE streaming.",
+              "Small invoices and expenses can be auto-approved below a limit the admin sets. If that limit can't be checked, the agent asks anyway.",
+            ],
+          },
+          {
+            id: "w360-mcp",
+            title: "10 FastMCP Tool Servers",
+            subtitle: "140+ tools",
+            icon: "boxes",
+            tech: ["MCP", "FastMCP", "Read-only SQL", "Azure Cost Management"],
+            summary:
+              "Tool servers for HR, finance, recruitment, compliance, support, DevOps, budget, security, read-only SQL and external APIs. They call the same REST API the app's own screens use.",
+            details: [
+              "The user's own JWT is passed through every tool call, so an agent can never see or do more than the person chatting.",
+              "The token is removed before the tool's input is checked, so the model never sees it.",
+              "Plain-English questions become parameterized, read-only SQL through a dedicated server.",
+            ],
+          },
+        ],
+      },
+      {
+        label: "Data & Models",
+        nodes: [
+          {
+            id: "w360-pg",
+            title: "PostgreSQL + pgvector",
+            subtitle: "Records, checkpoints, memory",
+            icon: "database",
+            tech: ["PostgreSQL", "pgvector", "Voyage embeddings", "RAG"],
+            summary:
+              "One database holds the platform's records, the agents' checkpoints and their long-term semantic memory.",
+            details: [
+              "After each conversation, useful facts are saved as Voyage embeddings. Near-duplicates strengthen an existing memory instead of adding a new one.",
+              "AskMe answers from help docs and company documents with citations, using only documents meant for the asker's role.",
+              "The owner of each memory is set by the server, never by the model.",
+            ],
+          },
+          {
+            id: "w360-llm",
+            title: "Claude + Self-Hosted Fallback",
+            subtitle: "Cost and reliability controls",
+            icon: "brain",
+            tech: ["Anthropic Claude", "Ollama", "Qwen3", "Prompt caching", "LangSmith"],
+            summary:
+              "Claude is the main model, with an optional self-hosted Qwen3 fallback through Ollama. Every agent run is traced in LangSmith.",
+            details: [
+              "Prompt caching covers agent system prompts and tool lists.",
+              "A smaller, cheaper model handles routing and memory extraction.",
+              "Rate limits (60 requests per user per hour, 600 overall) are checked before a stream opens.",
+            ],
+          },
+        ],
+      },
+      {
+        label: "Run & Operate",
+        nodes: [
+          {
+            id: "w360-aks",
+            title: "Azure Kubernetes Service",
+            subtitle: "Isolated prod and dev clusters",
+            icon: "cloud",
+            tech: ["AKS", "Docker", "GitHub Actions", "Key Vault", "Blob Storage"],
+            summary:
+              "Production and development run on separate clusters, with separate registries, databases and ingress.",
+            details: [
+              "Multi-arch container builds and path-filtered CI/CD, so a frontend-only change doesn't redeploy the backend.",
+              "3,000+ automated tests run behind a CI coverage gate.",
+              "Security audits of the app and infrastructure recur on a schedule, and findings are re-verified against the live environment.",
+            ],
+          },
+        ],
+      },
+    ],
+    feedback: { label: "traces → evals → better routing", toStage: 2 },
+  },
+  {
+    id: "vitalsync",
+    tab: "VitalSync",
+    title: "VitalSync: AI Family Health Assistant",
+    description:
+      "One chat runs the whole app. A LangChain agent reads the family's health data and documents, and every change it proposes waits for the user to tap Confirm.",
+    stages: [
+      {
+        label: "Apps",
+        nodes: [
+          {
+            id: "vs-app",
+            title: "Android & Web App",
+            subtitle: "Chat-first UI + voice",
+            icon: "phone",
+            tech: ["React", "TypeScript", "Capacitor", "Local notifications"],
+            summary:
+              "The whole interface is a chat. Replies render inline cards for records, medications, doses, appointments, insurance policies and bills.",
+            details: [
+              "After a confirmed change, the phone schedules or cancels its local medication and appointment reminders.",
+              "The Talk button opens a voice session with the health avatar.",
+              "Files attached in chat are uploaded to the user's own storage folder, then read by the agent.",
+            ],
+          },
+        ],
+      },
+      {
+        label: "Agent",
+        nodes: [
+          {
+            id: "vs-agent",
+            title: "LangChain Agent",
+            subtitle: "Streams tokens, tools and cards",
+            icon: "workflow",
+            tech: ["LangChain.js", "Express", "SSE", "Zod"],
+            summary:
+              "Each message runs a LangChain agent on the server and streams text, tool activity and cards back over Server-Sent Events.",
+            details: [
+              "Tools are built per request for the verified Firebase user, so they can only reach that user's data.",
+              "Tools cover family data, semantic search, health and symptom analysis, reading documents, and writes.",
+              "The system prompt is built on the server, so clients can't change it.",
+            ],
+          },
+        ],
+      },
+      {
+        label: "Models & Guardrails",
+        nodes: [
+          {
+            id: "vs-gemini",
+            title: "Gemini + Live API",
+            subtitle: "Chat, documents and voice",
+            icon: "brain",
+            tech: ["Gemini 2.5 Flash", "Gemini Live API", "WebSockets", "TTS"],
+            summary:
+              "Gemini powers the chat agent and document reading. Voice mode streams through the Gemini Live API over a WebSocket.",
+            details: [
+              "The opening health briefing is recorded once per analysis and replayed for free. Only the follow-up conversation uses Live.",
+              "Each user has a daily voice limit, and sessions are capped at 10 minutes.",
+            ],
+          },
+          {
+            id: "vs-confirm",
+            title: "Confirm-to-Write",
+            subtitle: "Every change needs a tap",
+            icon: "shield",
+            tech: ["Pending actions", "Human-in-the-loop"],
+            summary:
+              "Write tools never change data directly. They store a pending action and show a confirm card.",
+            details: [
+              "Confirm runs the action once and Cancel discards it.",
+              "Pending actions expire after 15 minutes.",
+            ],
+          },
+        ],
+      },
+      {
+        label: "Data & Hosting",
+        nodes: [
+          {
+            id: "vs-firebase",
+            title: "Firebase on Cloud Run",
+            subtitle: "Auth, Firestore, Storage",
+            icon: "database",
+            tech: ["Firebase Auth", "Firestore", "Firebase Storage", "Google Cloud Run"],
+            summary:
+              "Each family's data lives under its own user path in Firestore and Storage, and the server runs on Cloud Run.",
+            details: [
+              "Security rules and per-request tools both scope access to the signed-in user.",
+              "Chat sessions are kept per user (the last 30).",
+              "Agent tests use a scripted LangChain model and an in-memory Firestore, so they never call Gemini.",
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "agentic-trading",
+    tab: "Trading Assistant",
+    title: "Agentic Trading Assistant",
+    description:
+      "An LLM proposes trades from market context and the trader's own rules. A deterministic risk guardrail checks every proposal, the user approves every new rule, and the LLM can never place a trade.",
+    stages: [
+      {
+        label: "Market Context",
+        nodes: [
+          {
+            id: "at-market",
+            title: "Market Data & Events",
+            subtitle: "Prices, news, calendar",
+            icon: "activity",
+            tech: ["TradingView data", "Yahoo Finance RSS", "Economic calendar", "WASDE"],
+            summary:
+              "Each account's watchlist of up to 15 symbols (US stocks, ETFs and grain, oil and gold futures) is scanned during market hours.",
+            details: [
+              "Inputs: daily bars, stock fundamentals, headlines, high-importance US releases, the WASDE schedule and earnings dates.",
+              "Failed or rate-limited sources are treated as no data, never as a signal.",
+            ],
+          },
+        ],
+      },
+      {
+        label: "Reasoning",
+        nodes: [
+          {
+            id: "at-graph",
+            title: "LangGraph Recommendation Graph",
+            subtitle: "Context → rules → Gemini → trade",
+            icon: "workflow",
+            tech: ["LangGraph", "Gemini Flash-Lite", "LangSmith", "FastAPI"],
+            summary:
+              "Each recommendation runs as a StateGraph: market data, news, the trader's active rules, the prompt, the Gemini call, parsing and the proposed trade.",
+            details: [
+              "Every node is traced in LangSmith, and each run's id links to its trace.",
+              "A model allowlist and token cap hold cost to a target of under $25 a month.",
+            ],
+          },
+        ],
+      },
+      {
+        label: "Risk Control",
+        nodes: [
+          {
+            id: "at-risk",
+            title: "Deterministic Risk Guardrail",
+            subtitle: "Plain Python, not the LLM",
+            icon: "shield",
+            tech: ["Position limits", "Stop-losses", "1% risk rule", "Event blackout"],
+            summary:
+              "Every proposed trade is approved, rejected or modified by plain Python checks before anything else sees it.",
+            details: [
+              "Mandatory stop-losses, position-value caps and the 1% dollar-risk rule.",
+              "No new entries within set hours of macro or WASDE releases or the stock's own earnings.",
+              "Every surface is propose-and-notify only. The LLM can never place a trade.",
+            ],
+          },
+        ],
+      },
+      {
+        label: "Delivery & Learning",
+        nodes: [
+          {
+            id: "at-app",
+            title: "Android App + Push",
+            subtitle: "Desk, chat, results, strategy",
+            icon: "phone",
+            tech: ["Android", "Firebase Auth", "FCM"],
+            summary:
+              "Recommendations arrive as push alerts. Each one shows its chart, the risk checks it passed and the rules it used, with one-tap feedback.",
+            details: [
+              "Accounts are fully isolated, with their own rules, history, alerts and paper account.",
+              "Self sign-up is off, and the backend only serves an allowlist of users.",
+            ],
+          },
+          {
+            id: "at-eval",
+            title: "Run Grading & Rule Learning",
+            subtitle: "Measured, human-approved",
+            icon: "gauge",
+            tech: ["Outcome grading", "Rule suggestions", "Prompt versioning"],
+            summary:
+              "Every agent run is logged and graded against later prices. Feedback becomes candidate rules that only take effect after the user approves them.",
+            details: [
+              "Hit rate and average return are broken down by symbol, source, risk decision and prompt version.",
+              "Approved rules apply to the next recommendation immediately, with no retraining.",
+            ],
+          },
+        ],
+      },
+    ],
+    feedback: { label: "feedback → approved rules", toStage: 1 },
   },
 ];

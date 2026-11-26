@@ -287,10 +287,25 @@ export function ProjectsCarousel() {
       >
         {openProject && (
           <div className="p-5 sm:p-6">
+            {(openProject.period || openProject.role) && (
+              <p className="mb-3 font-mono text-xs text-ink-500">
+                {[openProject.period, openProject.role].filter(Boolean).join(" · ")}
+              </p>
+            )}
             {openProject.description && (
               <p className="mb-6 max-w-3xl text-sm leading-relaxed text-ink-400">{openProject.description}</p>
             )}
-            {openArch && <ArchitectureDiagram key={openArch.id} architecture={openArch} />}
+            {openProject.highlights && openProject.highlights.length > 0 && (
+              <ul className="mb-6 max-w-3xl space-y-1.5">
+                {openProject.highlights.map((h) => (
+                  <li key={h} className="flex gap-2 text-sm text-ink-300">
+                    <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-secondary-400" />
+                    {h}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {openArch && <ArchitectureDiagram key={openArch.id} architecture={openArch} isProject={openProject.kind === "project"} />}
             {openProject.links && openProject.links.length > 0 && (
               <div className="mt-6 flex flex-wrap gap-2">
                 {openProject.links.map((l) => (
